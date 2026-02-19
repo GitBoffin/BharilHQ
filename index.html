@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BharilHQ — Community Onboarding Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;--white:#ffffff;--accent:#1a1aff;--accent-light:#eeeeff;
+  --g50:#f9f9f9;--g100:#f0f0f0;--g200:#e0e0e0;--g300:#d0d0d0;--g400:#aaa;--g500:#888;--g700:#444;
+  --r:12px;--r-sm:8px;
+  --serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;
+  --sh-sm:0 1px 4px rgba(0,0,0,.06);--sh-md:0 4px 20px rgba(0,0,0,.07);--sh-lg:0 8px 40px rgba(0,0,0,.09)
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--white);color:var(--black);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--g100);animation:fadeDown .6s ease .1s both}
+.nav-logo{font-family:var(--serif);font-size:18px;color:var(--black);text-decoration:none}
+.nav-logo span{color:var(--accent)}
+nav ul{display:flex;gap:28px;list-style:none;align-items:center}
+nav ul a{font-size:14px;color:var(--g700);text-decoration:none;transition:color .2s}
+nav ul a:hover{color:var(--black)}
+.nav-cta{background:var(--black)!important;color:var(--white)!important;padding:9px 20px;border-radius:var(--r-sm);font-weight:500!important;transition:opacity .2s!important}
+.nav-cta:hover{opacity:.8}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:140px 24px 100px;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border:1px solid var(--g200);border-radius:100px;font-size:13px;color:var(--g700);margin-bottom:40px;animation:fadeUp .7s ease .3s both;letter-spacing:.02em}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+.hero h1{font-family:var(--serif);font-size:clamp(52px,8vw,96px);line-height:1;letter-spacing:-2px;max-width:840px;margin-bottom:28px;animation:fadeUp .8s ease .5s both}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:clamp(17px,2vw,20px);color:var(--g500);max-width:480px;font-weight:300;line-height:1.7;margin-bottom:52px;animation:fadeUp .8s ease .65s both}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s ease .8s both}
+.btn-primary{background:var(--black);color:var(--white);padding:14px 28px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;border:none;cursor:pointer;transition:opacity .2s,transform .2s;font-family:var(--sans);letter-spacing:-.01em}
+.btn-primary:hover{opacity:.82;transform:translateY(-1px)}
+.btn-secondary{background:var(--white);color:var(--black);padding:14px 28px;border-radius:10px;font-size:15px;font-weight:400;text-decoration:none;border:1.5px solid var(--g300);cursor:pointer;transition:border-color .2s,transform .2s;font-family:var(--sans);letter-spacing:-.01em}
+.btn-secondary:hover{border-color:var(--black);transform:translateY(-1px)}
+.hero-scroll{position:absolute;bottom:40px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--g300);font-size:11px;letter-spacing:.12em;text-transform:uppercase;animation:fadeUp 1s ease 1.2s both}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--g300),transparent);animation:scrollPulse 2s infinite}
+
+/* STATS */
+.stats{border-top:1px solid var(--g100);border-bottom:1px solid var(--g100);padding:44px 48px;display:flex;justify-content:center;gap:80px;flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-number{font-family:var(--serif);font-size:44px;letter-spacing:-2px;display:block;line-height:1;margin-bottom:6px}
+.stat-label{font-size:13px;color:var(--g500);font-weight:400}
+
+/* PROBLEM */
+.problem{padding:120px 48px;max-width:1040px;margin:0 auto}
+.section-tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:20px;display:block}
+.problem h2{font-family:var(--serif);font-size:clamp(36px,5vw,58px);line-height:1.08;letter-spacing:-1.5px;max-width:680px;margin-bottom:60px}
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--g100);border:1px solid var(--g100);border-radius:var(--r);overflow:hidden}
+.problem-card{background:var(--white);padding:40px 36px;position:relative}
+.problem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background .3s}
+.problem-card:hover::before{background:var(--accent)}
+.problem-step{font-family:var(--serif);font-size:60px;line-height:1;color:var(--g100);margin-bottom:18px;display:block}
+.problem-card h3{font-size:17px;font-weight:500;margin-bottom:10px;letter-spacing:-.3px}
+.problem-card p{font-size:14px;color:var(--g500);line-height:1.7;font-weight:300}
+
+/* FEATURES */
+.features{padding:120px 48px;background:var(--g50)}
+.features-inner{max-width:1040px;margin:0 auto}
+.features h2{font-family:var(--serif);font-size:clamp(36px,5vw,56px);letter-spacing:-1.5px;line-height:1.08;margin-bottom:14px;max-width:540px}
+.features-sub{font-size:17px;color:var(--g500);font-weight:300;margin-bottom:60px;max-width:400px;line-height:1.65}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.feature-card{background:var(--white);border:1px solid var(--g100);border-radius:var(--r);padding:36px;transition:box-shadow .25s,transform .25s}
+.feature-card:hover{box-shadow:var(--sh-lg);transform:translateY(-2px)}
+.feature-icon{width:42px;height:42px;border-radius:10px;background:var(--black);display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:16px;color:var(--white)}
+.feature-card h3{font-size:17px;font-weight:500;margin-bottom:10px;letter-spacing:-.3px}
+.feature-card p{font-size:14px;color:var(--g500);line-height:1.7;font-weight:300}
+
+/* ROLE GENERATOR SECTION */
+.role-gen-section{padding:120px 48px;background:var(--white)}
+.role-gen-inner{max-width:1040px;margin:0 auto}
+.role-gen-header{margin-bottom:56px}
+.role-gen-header h2{font-family:var(--serif);font-size:clamp(36px,5vw,58px);letter-spacing:-1.5px;line-height:1.08;max-width:680px;margin-bottom:16px}
+.role-gen-header p{font-size:17px;color:var(--g500);font-weight:300;max-width:480px;line-height:1.65}
+.gen-panel{background:var(--g50);border:1px solid var(--g200);border-radius:16px;overflow:hidden}
+.gen-inputs{padding:36px 40px;border-bottom:1px solid var(--g200);display:grid;grid-template-columns:1.2fr .7fr 1fr auto;gap:20px;align-items:end}
+.gen-input-group{display:flex;flex-direction:column;gap:8px}
+.gen-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--g500)}
+.gen-select,.gen-num{appearance:none;background:var(--white);border:1.5px solid var(--g200);border-radius:var(--r-sm);padding:11px 16px;font-size:14px;font-family:var(--sans);color:var(--black);transition:border-color .2s,box-shadow .2s;outline:none}
+.gen-select:focus,.gen-num:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,26,255,.08)}
+.gen-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;cursor:pointer}
+.gen-toggles{display:flex;gap:14px;flex-wrap:wrap;padding-top:2px}
+.gen-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--g700);cursor:pointer;user-select:none}
+.gen-toggle input[type="checkbox"]{appearance:none;width:36px;height:20px;background:var(--g200);border-radius:100px;cursor:pointer;transition:background .2s;position:relative;flex-shrink:0}
+.gen-toggle input[type="checkbox"]::after{content:'';position:absolute;width:14px;height:14px;background:white;border-radius:50%;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.gen-toggle input[type="checkbox"]:checked{background:var(--accent)}
+.gen-toggle input[type="checkbox"]:checked::after{left:19px}
+.gen-btn{background:var(--black);color:var(--white);padding:11px 26px;border-radius:var(--r-sm);font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:var(--sans);transition:opacity .2s,transform .15s;white-space:nowrap;letter-spacing:-.01em}
+.gen-btn:hover{opacity:.85;transform:translateY(-1px)}
+.gen-output{}
+.gen-placeholder{padding:72px 40px;text-align:center;color:var(--g400);display:flex;flex-direction:column;align-items:center;gap:14px}
+.gen-placeholder svg{opacity:.25}
+.gen-placeholder p{font-size:15px;font-weight:300;max-width:300px;line-height:1.6}
+
+/* OUTPUT */
+.output-tabs{display:flex;border-bottom:1px solid var(--g200);background:var(--white)}
+.output-tab{padding:16px 28px;font-size:13px;font-weight:500;color:var(--g500);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;letter-spacing:.01em;user-select:none}
+.output-tab.active{color:var(--black);border-bottom-color:var(--accent)}
+.output-tab:hover:not(.active){color:var(--g700)}
+.output-panel{display:none;padding:36px 40px;animation:fadeUp .3s ease}
+.output-panel.active{display:block}
+
+/* ROLE LADDER */
+.role-ladder{display:flex;flex-direction:column;gap:10px}
+.role-row{background:var(--white);border:1px solid var(--g100);border-radius:var(--r);padding:20px 24px;display:grid;grid-template-columns:190px 1fr auto;gap:20px;align-items:center;transition:box-shadow .2s,transform .2s}
+.role-row:hover{box-shadow:var(--sh-md);transform:translateX(3px)}
+.role-level-info{display:flex;align-items:center;gap:12px}
+.role-num{font-family:var(--serif);font-size:36px;color:var(--g100);line-height:1;flex-shrink:0}
+.role-name{font-size:15px;font-weight:600;letter-spacing:-.2px;margin-bottom:3px}
+.role-color-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.role-color-label{font-size:11px;color:var(--g400)}
+.role-desc{font-size:13px;color:var(--g500);font-weight:300;line-height:1.65}
+.role-badge-chip{font-size:11px;font-weight:600;padding:4px 12px;background:var(--accent-light);color:var(--accent);border-radius:100px;white-space:nowrap;letter-spacing:.02em}
+
+/* PERMISSIONS */
+.perm-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--g100)}
+.perm-table{width:100%;border-collapse:collapse;font-size:13px}
+.perm-table th{background:var(--g50);padding:12px 18px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--g500);border-bottom:1px solid var(--g100);white-space:nowrap}
+.perm-table td{padding:14px 18px;border-bottom:1px solid var(--g100);color:var(--g700);line-height:1.5;vertical-align:top}
+.perm-table tr:last-child td{border-bottom:none}
+.perm-table tr:hover td{background:var(--g50)}
+.ch-tag{display:inline-block;background:var(--g100);padding:2px 8px;border-radius:4px;margin:2px 2px 2px 0;font-family:monospace;font-size:11px;color:var(--g700)}
+.act-tag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:100px;background:var(--g50);border:1px solid var(--g200);color:var(--g700);margin:2px}
+.staff-sep td{background:var(--g50);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding:10px 18px;border-top:1px solid var(--g100)}
+
+/* BADGES */
+.badges-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.badge-card{background:var(--white);border:1px solid var(--g100);border-radius:var(--r);padding:22px 24px;display:flex;gap:16px;align-items:flex-start;transition:box-shadow .2s,transform .2s}
+.badge-card:hover{box-shadow:var(--sh-md);transform:translateY(-1px)}
+.badge-icon-wrap{width:44px;height:44px;background:var(--g50);border:1px solid var(--g100);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.badge-name{font-size:14px;font-weight:600;margin-bottom:4px;letter-spacing:-.2px}
+.badge-earn{font-size:12px;color:var(--g500);margin-bottom:6px;font-weight:300;line-height:1.55}
+.badge-unlock{font-size:11px;font-weight:600;color:var(--accent)}
+
+/* EXPORT */
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.export-block{background:var(--white);border:1px solid var(--g100);border-radius:var(--r);overflow:hidden}
+.export-block-head{padding:13px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between}
+.export-block-head span{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--g700)}
+.copy-btn{font-size:12px;font-weight:500;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--sans);padding:4px 10px;border-radius:6px;transition:background .15s}
+.copy-btn:hover{background:var(--accent-light)}
+.copy-btn.ok{color:#22aa66}
+.export-code{padding:18px;font-family:'SF Mono','Fira Code',monospace;font-size:11.5px;color:var(--g700);white-space:pre-wrap;overflow-y:auto;max-height:260px;line-height:1.65;background:var(--g50)}
+.export-dl-bar{grid-column:1/-1;background:var(--black);border-radius:var(--r);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.export-dl-bar strong{display:block;font-size:15px;color:var(--white);margin-bottom:4px}
+.export-dl-bar p{font-size:13px;color:rgba(255,255,255,.5);font-weight:300}
+.dl-btn{background:var(--white);color:var(--black);padding:10px 22px;border-radius:8px;font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:var(--sans);transition:opacity .2s;white-space:nowrap}
+.dl-btn:hover{opacity:.85}
+
+/* SOCIAL PROOF */
+.social-proof{padding:120px 48px;background:var(--g50)}
+.social-proof-inner{max-width:1040px;margin:0 auto;text-align:center}
+.social-proof-inner h2{font-family:var(--serif);font-size:clamp(36px,5vw,60px);letter-spacing:-1.5px;line-height:1.08;margin-bottom:18px}
+.social-proof-inner h2 em{font-style:italic;color:var(--accent)}
+.social-proof-sub{font-size:17px;color:var(--g500);font-weight:300;max-width:380px;margin:0 auto 60px;line-height:1.65}
+.testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.testimonial{background:var(--white);border:1px solid var(--g100);border-radius:var(--r);padding:30px;text-align:left;transition:box-shadow .25s}
+.testimonial:hover{box-shadow:var(--sh-lg)}
+.test-text{font-size:14px;line-height:1.75;color:var(--g700);font-weight:300;margin-bottom:22px;font-style:italic}
+.test-author{display:flex;align-items:center;gap:12px}
+.author-av{width:36px;height:36px;border-radius:50%;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--g700);flex-shrink:0}
+.author-name{font-size:13px;font-weight:600;margin-bottom:1px}
+.author-role{font-size:12px;color:var(--g500)}
+
+/* CTA */
+.cta-section{padding:120px 48px;background:var(--black);text-align:center}
+.cta-section h2{font-family:var(--serif);font-size:clamp(40px,6vw,72px);letter-spacing:-2px;line-height:1.05;color:var(--white);margin-bottom:22px;max-width:620px;margin-left:auto;margin-right:auto}
+.cta-section p{font-size:17px;color:rgba(255,255,255,.45);font-weight:300;margin-bottom:48px;max-width:360px;margin-left:auto;margin-right:auto;line-height:1.65}
+.btn-white{background:var(--white);color:var(--black);padding:16px 36px;border-radius:10px;font-size:16px;font-weight:500;text-decoration:none;display:inline-block;transition:opacity .2s,transform .2s;font-family:var(--sans)}
+.btn-white:hover{opacity:.9;transform:translateY(-1px)}
+
+/* FOOTER */
+footer{padding:44px 48px;border-top:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.footer-logo{font-family:var(--serif);font-size:16px;color:var(--black);text-decoration:none}
+.footer-logo span{color:var(--accent)}
+.footer-links{display:flex;gap:28px}
+.footer-links a{font-size:13px;color:var(--g500);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--black)}
+.footer-copy{font-size:12px;color:var(--g300);width:100%;text-align:center}
+.divider{height:1px;background:var(--g100);max-width:1040px;margin:0 auto}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.4;transform:scaleY(.8)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:16px 20px}
+  nav ul li:not(:last-child){display:none}
+  .problem-grid,.features-grid,.testimonials{grid-template-columns:1fr}
+  .gen-inputs{grid-template-columns:1fr 1fr;gap:16px}
+  .badges-grid,.export-grid{grid-template-columns:1fr}
+  .role-row{grid-template-columns:1fr;gap:10px}
+  .role-num{font-size:24px}
+  .stats{gap:32px}
+  .problem,.features,.role-gen-section,.social-proof{padding:80px 20px}
+  .cta-section,footer{padding:80px 20px}
+  .gen-inputs{padding:24px 20px}
+  .output-panel{padding:24px 20px}
+}
+@media(max-width:560px){
+  .gen-inputs{grid-template-columns:1fr}
+  .output-tab{padding:12px 14px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Bharil<span>HQ</span></a>
+  <ul>
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#role-gen">Role Generator</a></li>
+    <li><a href="#proof">Proof</a></li>
+    <li><a href="#contact" class="nav-cta">Request Setup</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="badge-dot"></span>Community infrastructure for builders</div>
+  <h1>Community onboarding<br>that <em>converts.</em></h1>
+  <p class="hero-sub">Stop losing members after marketing spikes. Turn Discord chaos into structured retention — in days, not months.</p>
+  <div class="hero-ctas">
+    <a href="#contact" class="btn-primary">Request Setup →</a>
+    <a href="#role-gen" class="btn-secondary">Try Role Generator</a>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-item reveal"><span class="stat-number">50+</span><span class="stat-label">Communities launched</span></div>
+  <div class="stat-item reveal" style="transition-delay:.1s"><span class="stat-number">71+</span><span class="stat-label">Websites shipped</span></div>
+  <div class="stat-item reveal" style="transition-delay:.2s"><span class="stat-number">3×</span><span class="stat-label">Average retention lift</span></div>
+  <div class="stat-item reveal" style="transition-delay:.3s"><span class="stat-number">14d</span><span class="stat-label">Avg. setup time</span></div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <span class="section-tag reveal">The founder mistake</span>
+  <h2 class="reveal">Great marketing.<br>Zero infrastructure.</h2>
+  <div class="problem-grid reveal">
+    <div class="problem-card"><span class="problem-step">01</span><h3>Marketing brings visitors</h3><p>Your campaign lands. DMs flood in. Discord pings everywhere. Traffic looks great on the dashboard.</p></div>
+    <div class="problem-card"><span class="problem-step">02</span><h3>No structure = chaos</h3><p>Members join but don't know where to go, who to talk to, or what's expected. The energy dies in 48 hours.</p></div>
+    <div class="problem-card"><span class="problem-step">03</span><h3>Community is infrastructure</h3><p>Retention isn't a vibe — it's a system. Without onboarding flows and trust signals, churn is the only outcome.</p></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <span class="section-tag reveal">What we build</span>
+    <h2 class="reveal">Everything a community<br>needs to stick.</h2>
+    <p class="features-sub reveal">Four systems. Deployed together. Built for the long haul.</p>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <h3>Discord Onboarding Flow</h3>
+        <p>A structured welcome sequence that orients new members, sets expectations, and guides them to their first meaningful interaction — automatically.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.1s">
+        <div class="feature-icon">◈</div>
+        <h3>Role + Contribution System</h3>
+        <p>Dynamic roles tied to real behavior. Members earn status, unlock channels, and feel invested — turning passive observers into active contributors.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.2s">
+        <div class="feature-icon">◻</div>
+        <h3>Trust-First Website Layer</h3>
+        <p>A landing page that converts before a member even joins. Social proof, clear positioning, and a frictionless path from discovery to Discord.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.3s">
+        <div class="feature-icon">▣</div>
+        <h3>Community Retention Design</h3>
+        <p>Rituals, rhythms, and touchpoints designed to keep people engaged week after week — not just in the first 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE GENERATOR -->
+<section class="role-gen-section" id="role-gen">
+  <div class="role-gen-inner">
+    <div class="role-gen-header reveal">
+      <span class="section-tag">Role System Generator</span>
+      <h2>Build your Discord role ladder<br>in 10 seconds.</h2>
+      <p>Select your community type. We generate the full role hierarchy, permissions, badges, and export-ready config — automatically adapted to your community.</p>
+    </div>
+
+    <div class="gen-panel reveal">
+      <div class="gen-inputs">
+        <div class="gen-input-group">
+          <label class="gen-label">Community Type</label>
+          <select class="gen-select" id="communityType">
+            <option value="">Select community type...</option>
+            <option value="memecoin">Memecoin</option>
+            <option value="nft">NFT</option>
+            <option value="trading">Trading</option>
+            <option value="gaming">Gaming</option>
+            <option value="dao">DAO</option>
+            <option value="profirm">ProFirm / SaaS</option>
+          </select>
+        </div>
+        <div class="gen-input-group">
+          <label class="gen-label">Max Levels</label>
+          <input type="number" class="gen-num" id="maxLevels" value="5" min="3" max="7">
+        </div>
+        <div class="gen-input-group">
+          <label class="gen-label">Options</label>
+          <div class="gen-toggles">
+            <label class="gen-toggle"><input type="checkbox" id="enableBadges" checked><span>Badges</span></label>
+            <label class="gen-toggle"><input type="checkbox" id="enableAdmin" checked><span>Admin roles</span></label>
+          </div>
+        </div>
+        <button class="gen-btn" onclick="generateRoles()">Generate →</button>
+      </div>
+
+      <div class="gen-output">
+        <div class="gen-placeholder" id="genPlaceholder">
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="36" height="36" rx="7" stroke="#888" stroke-width="1.5"/>
+            <path d="M17 21h18M17 26h12M17 31h14" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p>Select a community type and click Generate to build your role system.</p>
+        </div>
+        <div id="genResults" style="display:none">
+          <div class="output-tabs">
+            <div class="output-tab active" data-tab="ladder" onclick="switchTab('ladder',this)">Role Ladder</div>
+            <div class="output-tab" data-tab="permissions" onclick="switchTab('permissions',this)">Permissions</div>
+            <div class="output-tab" data-tab="badges" onclick="switchTab('badges',this)" id="badgesTabBtn">Badges</div>
+            <div class="output-tab" data-tab="export" onclick="switchTab('export',this)">Export</div>
+          </div>
+          <div class="output-panel active" id="tab-ladder"><div class="role-ladder" id="ladderContent"></div></div>
+          <div class="output-panel" id="tab-permissions"><div class="perm-wrap"><table class="perm-table" id="permContent"></table></div></div>
+          <div class="output-panel" id="tab-badges"><div class="badges-grid" id="badgesContent"></div></div>
+          <div class="output-panel" id="tab-export"><div class="export-grid" id="exportContent"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOCIAL PROOF -->
+<section class="social-proof" id="proof">
+  <div class="social-proof-inner">
+    <span class="section-tag reveal">From the community</span>
+    <h2 class="reveal">Built for builders who<br><em>can't afford churn.</em></h2>
+    <p class="social-proof-sub reveal">Real communities. Real retention. No fluffy metrics.</p>
+    <div class="testimonials">
+      <div class="testimonial reveal">
+        <p class="test-text">"We launched our Discord to 800 people with no structure. BharilHQ rebuilt everything in 10 days. Retention went from 12% to 41%."</p>
+        <div class="test-author"><div class="author-av">AR</div><div><div class="author-name">Arjun R.</div><div class="author-role">Founder, DevCircle</div></div></div>
+      </div>
+      <div class="testimonial reveal" style="transition-delay:.1s">
+        <p class="test-text">"The trust-first website alone 2×'d our join rate. The role system meant people actually stayed past day 7 and kept coming back."</p>
+        <div class="test-author"><div class="author-av">SK</div><div><div class="author-name">Sanya K.</div><div class="author-role">Community Lead, FounderClub</div></div></div>
+      </div>
+      <div class="testimonial reveal" style="transition-delay:.2s">
+        <p class="test-text">"I spent 3 months trying to figure this out. They shipped the whole infrastructure in under two weeks. The role generator alone saved hours."</p>
+        <div class="test-author"><div class="author-av">MP</div><div><div class="author-name">Marcus P.</div><div class="author-role">Creator, BuildInPublic</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2>Ready to stop<br>losing members?</h2>
+  <p>One setup. Lasting retention. We handle the infrastructure so you can focus on building.</p>
+  <a href="mailto:hello@bharilhq.com" class="btn-white">Request Setup →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">Bharil<span>HQ</span></a>
+  <div class="footer-links">
+    <a href="https://twitter.com/bharilhq" target="_blank">Twitter / X</a>
+    <a href="https://discord.gg/bharilhq" target="_blank">Discord</a>
+    <a href="mailto:hello@bharilhq.com">DM us</a>
+  </div>
+  <div class="footer-copy">© 2025 BharilHQ. Community infrastructure for the next generation of builders.</div>
+</footer>
+
+<script>
+const DB = {
+  memecoin:{
+    name:"Memecoin",
+    roles:[
+      {name:"Newcomer",    color:"#94a3b8",cn:"Slate",   desc:"Fresh to the community. Exploring the vibe and learning the culture.",               badge:null},
+      {name:"Holder",      color:"#f59e0b",cn:"Amber",   desc:"Verified token holder. Skin in the game, aligned with the mission.",                 badge:"Early Supporter"},
+      {name:"Contributor", color:"#3b82f6",cn:"Blue",    desc:"Active voice. Creates content, memes, and drives community energy forward.",         badge:"Top Contributor"},
+      {name:"OG",          color:"#8b5cf6",cn:"Violet",  desc:"Trusted veteran. Been here through ups and downs. Real loyalty.",                    badge:"Meme Lord"},
+      {name:"Whale/Core",  color:"#ef4444",cn:"Red",     desc:"Core inner circle. Major holder + high-trust contributor. Community pillar.",         badge:"Launch OG"},
+    ],
+    perms:{
+      "Newcomer":   {access:["#start-here","#announcements","#rules"],          actions:["Read-only","React to messages"]},
+      "Holder":     {access:["#general","#price-talk","#memes"],                actions:["Post","React","Share memes"]},
+      "Contributor":{access:["#contributor-lounge","#collab-requests","#polls"],actions:["Post","Create polls","Start threads","Share resources"]},
+      "OG":         {access:["#og-lounge","#alpha-drops","#early-announcements"],actions:["Special perks","Giveaway access","Early alpha info"]},
+      "Whale/Core": {access:["#core-team","#strategy","#admin-discuss"],        actions:["Moderate","Manage channels","Co-create strategy","Assign roles"]},
+    },
+    badges:[
+      {icon:"▲",name:"Early Supporter", earn:"Joined before official launch or first marketing push",              unlock:"Holder role"},
+      {icon:"◆",name:"Top Contributor", earn:"Top 10% of message contributors in the last 30 days",               unlock:"Contributor role"},
+      {icon:"◉",name:"Meme Lord",       earn:"Won a community meme contest or received 50+ reactions on a post",  unlock:"OG role"},
+      {icon:"▣",name:"Guardian",        earn:"Helped mods and onboarded 5+ new members",                          unlock:"Special flair"},
+      {icon:"★",name:"Launch OG",       earn:"Was present in alpha phase or among first 100 members",             unlock:"Whale/Core consideration"},
+    ],
+    staff:"default"
+  },
+  nft:{
+    name:"NFT",
+    roles:[
+      {name:"Newcomer",       color:"#94a3b8",cn:"Slate",   desc:"Just joined. Exploring the project, art, and community culture.",               badge:null},
+      {name:"Collector",      color:"#10b981",cn:"Emerald", desc:"Verified NFT holder. Has genuine skin in the project.",                         badge:"Early Collector"},
+      {name:"Contributor",    color:"#3b82f6",cn:"Blue",    desc:"Adds value through art, promotion, feedback, or resource sharing.",             badge:"Top Creator"},
+      {name:"OG",             color:"#f59e0b",cn:"Amber",   desc:"Long-standing trusted member with deep project alignment.",                     badge:"OG Collector"},
+      {name:"Core / Curator", color:"#8b5cf6",cn:"Violet",  desc:"Highest trust. Co-curates direction, moderates, and shapes the project future.", badge:"Curator"},
+    ],
+    perms:{
+      "Newcomer":      {access:["#welcome","#project-info","#announcements"],  actions:["Read-only","React"]},
+      "Collector":     {access:["#holder-lounge","#art-drops","#general"],     actions:["Post","React","Start threads"]},
+      "Contributor":   {access:["#collab-hub","#creator-showcase","#feedback"],actions:["Post","Poll creation","Share resources","Tag team"]},
+      "OG":            {access:["#og-vault","#whitelist-alpha","#giveaways"],  actions:["WL access","Early drop info","Exclusive events"]},
+      "Core / Curator":{access:["#curator-desk","#moderation","#roadmap"],     actions:["Moderate","Manage roles","Co-create roadmap","Handle disputes"]},
+    },
+    badges:[
+      {icon:"▲",name:"Early Collector", earn:"Minted or purchased in first wave / genesis drop",                        unlock:"Collector role"},
+      {icon:"◆",name:"Top Creator",     earn:"Created fanart or threads with 100+ engagements",                         unlock:"Contributor role"},
+      {icon:"◉",name:"WL Winner",       earn:"Won a whitelist spot through community contest or contribution",           unlock:"Special access"},
+      {icon:"★",name:"OG Collector",    earn:"Held the NFT continuously for 6+ months",                                 unlock:"OG role"},
+      {icon:"▣",name:"Curator",         earn:"Nominated and voted in by Core for outstanding community leadership",      unlock:"Core / Curator role"},
+    ],
+    staff:"nft"
+  },
+  trading:{
+    name:"Trading",
+    roles:[
+      {name:"Newcomer",        color:"#94a3b8",cn:"Slate", desc:"New to the server. Learning the structure and trading culture.",              badge:null},
+      {name:"Verified Trader", color:"#10b981",cn:"Green", desc:"Identity-verified trader with proven activity. Trusted participant.",         badge:"Verified Trader"},
+      {name:"Contributor",     color:"#3b82f6",cn:"Blue",  desc:"Regularly shares analysis, setups, or resources that help the community.",    badge:"Alpha Contributor"},
+      {name:"OG",              color:"#f59e0b",cn:"Amber", desc:"Long-standing trusted member with reliable signal history.",                  badge:"OG Trader"},
+      {name:"Core",            color:"#ef4444",cn:"Red",   desc:"Inner circle. Shapes strategy, manages channels, and onboards talent.",       badge:"Signal Leader"},
+    ],
+    perms:{
+      "Newcomer":       {access:["#rules","#start-here","#market-news"],       actions:["Read-only","React"]},
+      "Verified Trader":{access:["#trade-chat","#charts","#setups"],           actions:["Post","Share setups","React","Start threads"]},
+      "Contributor":    {access:["#analysis-hub","#ideas-board","#polls"],     actions:["Post analysis","Create polls","Ping contributors"]},
+      "OG":             {access:["#alpha-channel","#private-calls","#early-signals"],actions:["Alpha access","Private calls","Early signals"]},
+      "Core":           {access:["#core-team","#bot-commands","#mod-log"],     actions:["Moderate","Manage channels","Assign roles","Run giveaways"]},
+    },
+    badges:[
+      {icon:"▲",name:"Verified Trader",   earn:"Completed verification and stayed active for 14 days",             unlock:"Verified Trader role"},
+      {icon:"◆",name:"Signal Sharer",     earn:"Shared 10+ signals or setups that were community-reviewed",        unlock:"Contributor consideration"},
+      {icon:"◉",name:"Alpha Contributor", earn:"Top 10% of helpful contributions in a 30-day window",             unlock:"Contributor role"},
+      {icon:"★",name:"OG Trader",         earn:"Active verified member for 6+ months with consistent contribution", unlock:"OG role"},
+      {icon:"▣",name:"Signal Leader",     earn:"Ran a verified signal that outperformed in a community challenge",  unlock:"Core consideration"},
+    ],
+    staff:"default"
+  },
+  gaming:{
+    name:"Gaming",
+    roles:[
+      {name:"Newcomer",    color:"#94a3b8",cn:"Slate", desc:"Just spawned. Learning the server layout and community vibes.",           badge:null},
+      {name:"Player",      color:"#10b981",cn:"Green", desc:"Active community member. Shows up, plays, and engages consistently.",    badge:"Active Player"},
+      {name:"Contributor", color:"#3b82f6",cn:"Blue",  desc:"Goes beyond playing — creates guides, clips, or hosts events.",          badge:"Content Creator"},
+      {name:"OG",          color:"#f59e0b",cn:"Amber", desc:"Veteran player. Known face. Deep trust and community longevity.",         badge:"Server Veteran"},
+      {name:"Core",        color:"#ef4444",cn:"Red",   desc:"Server backbone. Organizes tournaments, manages channels, onboards new.", badge:"Tournament Org"},
+    ],
+    perms:{
+      "Newcomer":   {access:["#welcome","#rules","#announcements"],          actions:["Read-only","React"]},
+      "Player":     {access:["#general","#lfg","#game-chat"],               actions:["Post","React","LFG posts","Start threads"]},
+      "Contributor":{access:["#guides-hub","#clip-sharing","#events"],      actions:["Post guides","Share clips","Create polls","Host events"]},
+      "OG":         {access:["#og-lounge","#early-events","#beta-access"],  actions:["Beta access","Exclusive events","Priority queues"]},
+      "Core":       {access:["#staff-room","#mod-tools","#tournament-org"], actions:["Moderate","Manage channels","Run tournaments","Assign roles"]},
+    },
+    badges:[
+      {icon:"▲",name:"Active Player",    earn:"30+ consecutive days active in the server",                          unlock:"Player role"},
+      {icon:"◆",name:"Content Creator",  earn:"Posted 5+ clips or guides with 20+ reactions each",                 unlock:"Contributor role"},
+      {icon:"◉",name:"Tournament Champ", earn:"Won a community-run tournament",                                      unlock:"Special flair"},
+      {icon:"★",name:"Server Veteran",   earn:"Active member for 6+ months",                                         unlock:"OG role"},
+      {icon:"▣",name:"Tournament Org",   earn:"Organized a server tournament with 10+ participants",                unlock:"Core consideration"},
+    ],
+    staff:"default"
+  },
+  dao:{
+    name:"DAO",
+    roles:[
+      {name:"Newcomer",    color:"#94a3b8",cn:"Slate",  desc:"New member. Observing governance and understanding the DAO structure.",          badge:null},
+      {name:"Voter",       color:"#10b981",cn:"Green",  desc:"Token holder with verified voting rights. Participates in governance.",          badge:"Early Voter"},
+      {name:"Contributor", color:"#3b82f6",cn:"Blue",   desc:"Active in discussions, proposals, and working groups. Drives the DAO forward.",  badge:"Proposal Creator"},
+      {name:"OG",          color:"#8b5cf6",cn:"Violet", desc:"Founding or long-standing voter with high trust and proven track record.",        badge:"DAO OG"},
+      {name:"Core",        color:"#ef4444",cn:"Red",    desc:"Multi-sig signer or governance lead. Executes decisions and shapes direction.",  badge:"Governance Lead"},
+    ],
+    perms:{
+      "Newcomer":   {access:["#welcome","#dao-101","#announcements"],          actions:["Read-only","React"]},
+      "Voter":      {access:["#governance","#proposals","#forum"],             actions:["Vote on proposals","React","Comment on proposals"]},
+      "Contributor":{access:["#working-groups","#idea-board","#polls"],        actions:["Create proposals","Start threads","Run polls","Coordinate WGs"]},
+      "OG":         {access:["#og-council","#pre-vote-discuss","#treasury-watch"],actions:["Treasury visibility","Pre-vote discussions","Nominate members"]},
+      "Core":       {access:["#multi-sig","#exec-team","#core-ops"],           actions:["Execute proposals","Manage treasury","Assign roles","Manage channels"]},
+    },
+    badges:[
+      {icon:"▲",name:"Early Voter",      earn:"Voted in the first 3 governance proposals",                         unlock:"Voter recognition"},
+      {icon:"◆",name:"Proposal Creator", earn:"Created a proposal that passed with 60%+ quorum",                  unlock:"Contributor role"},
+      {icon:"◉",name:"Top Contributor",  earn:"Top 10% of governance engagement in a quarter",                    unlock:"OG consideration"},
+      {icon:"★",name:"DAO OG",           earn:"Active governance participant since genesis / first 3 months",     unlock:"OG role"},
+      {icon:"▣",name:"Governance Lead",  earn:"Nominated by Core for sustained governance leadership",            unlock:"Core role"},
+    ],
+    staff:"default"
+  },
+  profirm:{
+    name:"ProFirm / SaaS",
+    roles:[
+      {name:"Newcomer",    color:"#94a3b8",cn:"Slate",  desc:"Onboarding. Getting familiar with the team, tools, and community standards.",    badge:null},
+      {name:"Member",      color:"#0ea5e9",cn:"Sky",    desc:"Active professional member. Consistent engagement and reliable value delivery.",  badge:"Active Member"},
+      {name:"Contributor", color:"#3b82f6",cn:"Blue",   desc:"Goes beyond — shares resources, leads discussions, supports other members.",      badge:"Top Contributor"},
+      {name:"Mentor",      color:"#8b5cf6",cn:"Violet", desc:"Recognized expert. Guides newcomers, leads working groups, drives quality.",     badge:"Mentor"},
+      {name:"Core",        color:"#0a0a0a",cn:"Onyx",   desc:"Trusted inner circle. Shapes direction, onboards talent, and manages channels.", badge:"Project Leader"},
+    ],
+    perms:{
+      "Newcomer":   {access:["#start-here","#announcements","#introductions"],   actions:["Read-only","Introduce yourself"]},
+      "Member":     {access:["#general","#resources","#help-desk"],              actions:["Post","React","Start threads","Ask questions"]},
+      "Contributor":{access:["#contributor-hub","#projects","#peer-review"],     actions:["Post resources","Create polls","Lead discussions","Peer feedback"]},
+      "Mentor":     {access:["#mentor-lounge","#office-hours","#hiring-board"],  actions:["Run office hours","Post opportunities","Endorse members"]},
+      "Core":       {access:["#core-team","#operations","#member-management"],   actions:["Moderate","Manage channels","Assign roles","Set strategy"]},
+    },
+    badges:[
+      {icon:"◈",name:"Active Member",    earn:"30+ days of consistent, meaningful engagement",                     unlock:"Member role"},
+      {icon:"◆",name:"Top Contributor",  earn:"Top 10% of resource sharing or peer support in a 30-day window",   unlock:"Contributor role"},
+      {icon:"▣",name:"Project Leader",   earn:"Successfully led a community project or initiative end-to-end",     unlock:"Core consideration"},
+      {icon:"◉",name:"Mentor",           earn:"Mentored 3+ members who reached Contributor status",               unlock:"Mentor role"},
+      {icon:"★",name:"Founding Member",  earn:"Joined in the first 60 days of community launch",                  unlock:"Legacy flair + OG access"},
+    ],
+    staff:"profirm"
+  }
+};
+
+const STAFF = {
+  default:[
+    {name:"Moderator",         channels:["All public channels","#mod-log"],    actions:["Delete messages","Timeout members","Handle reports"]},
+    {name:"Community Manager", channels:["All channels","#announcements"],     actions:["Post announcements","Run events","Manage bots"]},
+    {name:"Admin",             channels:["All channels","#admin-panel"],        actions:["Full permissions","Manage roles","Server settings"]},
+    {name:"Founder",           channels:["All channels"],                       actions:["Full ownership","All permissions","Final say"]},
+  ],
+  nft:[
+    {name:"Curator",           channels:["All channels","#curator-desk"],      actions:["Moderate","Manage WL lists","Review art submissions"]},
+    {name:"Community Manager", channels:["All channels","#announcements"],     actions:["Run events","Manage partnerships","Announcements"]},
+    {name:"Admin",             channels:["All channels","#admin-panel"],        actions:["Full permissions","Manage roles","Server settings"]},
+    {name:"Founder",           channels:["All channels"],                       actions:["Full ownership","Shape roadmap","All permissions"]},
+  ],
+  profirm:[
+    {name:"Moderator",         channels:["All public channels","#mod-log"],    actions:["Enforce guidelines","Handle disputes","Timeout members"]},
+    {name:"Community Manager", channels:["All channels","#announcements"],     actions:["Run events","Manage partnerships","Onboard new members"]},
+    {name:"Admin",             channels:["All channels","#admin-panel"],        actions:["Full permissions","Manage roles","Server configuration"]},
+    {name:"Founder",           channels:["All channels"],                       actions:["Full ownership","Set company direction","All permissions"]},
+  ]
+};
+
+let currentData = null;
+
+function generateRoles(){
+  const type = document.getElementById('communityType').value;
+  if(!type){alert('Please select a community type first.');return;}
+  const maxL = Math.min(Math.max(parseInt(document.getElementById('maxLevels').value)||5,3),7);
+  const showBadges = document.getElementById('enableBadges').checked;
+  const showAdmin  = document.getElementById('enableAdmin').checked;
+
+  currentData = DB[type];
+  const roles = currentData.roles.slice(0,maxL);
+  const staff = showAdmin ? (STAFF[currentData.staff]||STAFF.default) : [];
+
+  document.getElementById('genPlaceholder').style.display='none';
+  document.getElementById('genResults').style.display='block';
+  document.getElementById('badgesTabBtn').style.display=showBadges?'':'none';
+
+  buildLadder(roles);
+  buildPerms(roles, currentData, staff);
+  if(showBadges) buildBadges(currentData.badges);
+  buildExport(currentData, roles, currentData.badges, staff, showBadges);
+
+  switchTab('ladder', document.querySelector('.output-tab'));
+}
+
+function buildLadder(roles){
+  document.getElementById('ladderContent').innerHTML = roles.map((r,i)=>`
+    <div class="role-row">
+      <div class="role-level-info">
+        <span class="role-num">0${i+1}</span>
+        <div>
+          <div class="role-name"><span class="role-color-dot" style="background:${r.color}"></span>${r.name}</div>
+          <div class="role-color-label">Color: ${r.cn} &middot; ${r.color}</div>
+        </div>
+      </div>
+      <div class="role-desc">${r.desc}</div>
+      ${r.badge?`<span class="role-badge-chip">+ ${r.badge}</span>`:'<span></span>'}
+    </div>`).join('');
+}
+
+function buildPerms(roles, data, staff){
+  const memberRows = roles.map(r=>{
+    const p=data.perms[r.name]||{access:[],actions:[]};
+    return `<tr>
+      <td><strong>${r.name}</strong></td>
+      <td>${p.access.map(c=>`<span class="ch-tag">${c}</span>`).join('')}</td>
+      <td>${p.actions.map(a=>`<span class="act-tag">${a}</span>`).join('')}</td>
+    </tr>`;
+  }).join('');
+
+  const staffRows = staff.length ? `
+    <tr class="staff-sep"><td colspan="3">── Staff &amp; Admin Roles</td></tr>
+    ${staff.map(s=>`<tr>
+      <td><strong>${s.name}</strong></td>
+      <td>${s.channels.map(c=>`<span class="ch-tag">${c}</span>`).join('')}</td>
+      <td>${s.actions.map(a=>`<span class="act-tag">${a}</span>`).join('')}</td>
+    </tr>`).join('')}` : '';
+
+  document.getElementById('permContent').innerHTML=`
+    <thead><tr><th>Role</th><th>Channels Access</th><th>Actions Allowed</th></tr></thead>
+    <tbody>${memberRows}${staffRows}</tbody>`;
+}
+
+function buildBadges(badges){
+  document.getElementById('badgesContent').innerHTML=badges.map(b=>`
+    <div class="badge-card">
+      <div class="badge-icon-wrap">${b.icon}</div>
+      <div>
+        <div class="badge-name">${b.name}</div>
+        <div class="badge-earn">Earn by: ${b.earn}</div>
+        <div class="badge-unlock">Unlocks: ${b.unlock}</div>
+      </div>
+    </div>`).join('');
+}
+
+function buildExport(data, roles, badges, staff, showBadges){
+  const txt = [
+    `=== ${data.name.toUpperCase()} COMMUNITY ROLE SYSTEM ===`,
+    `Generated by BharilHQ\n`,
+    `ROLE LADDER`,
+    roles.map((r,i)=>`  L${i+1}: ${r.name}\n  Color: ${r.cn} (${r.color})\n  ${r.desc}`).join('\n\n'),
+    `\nSTAFF ROLES`,
+    staff.map(s=>`  ${s.name}: ${s.actions.join(', ')}`).join('\n'),
+    showBadges?`\nBADGES\n${badges.map(b=>`  ${b.icon} ${b.name} — ${b.earn}`).join('\n')}`:'',
+  ].join('\n');
+
+  const json = JSON.stringify({
+    community_type:data.name,
+    generated_by:"BharilHQ",
+    roles:roles.map((r,i)=>({level:i+1,name:r.name,color:r.color,description:r.desc,badge_unlock:r.badge})),
+    staff_roles:staff.map(s=>({name:s.name,channels:s.channels,permissions:s.actions})),
+    badges:showBadges?badges.map(b=>({name:b.name,how_to_earn:b.earn,unlocks:b.unlock})):[],
+  },null,2);
+
+  const txtEsc=txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const jsonEsc=json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  const txtAttr=JSON.stringify(txt).replace(/"/g,'&quot;');
+  const jsonAttr=JSON.stringify(json).replace(/"/g,'&quot;');
+
+  document.getElementById('exportContent').innerHTML=`
+    <div class="export-block">
+      <div class="export-block-head">
+        <span>Text Block</span>
+        <button class="copy-btn" onclick='doCopy(this,${JSON.stringify(txt)})'>Copy</button>
+      </div>
+      <div class="export-code">${txtEsc}</div>
+    </div>
+    <div class="export-block">
+      <div class="export-block-head">
+        <span>JSON Config</span>
+        <button class="copy-btn" onclick='doCopy(this,${JSON.stringify(json)})'>Copy</button>
+      </div>
+      <div class="export-code">${jsonEsc}</div>
+    </div>
+    <div class="export-dl-bar">
+      <div><strong>Download JSON</strong><p>Import into MEE6, Carl-bot, or Arcane for auto-assign role setup.</p></div>
+      <button class="dl-btn" onclick='dlJSON(${JSON.stringify(json)})'>Download .json</button>
+    </div>`;
+}
+
+function doCopy(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    const o=btn.textContent; btn.textContent='Copied!'; btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok')},2000);
+  });
+}
+
+function dlJSON(str){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([str],{type:'application/json'}));
+  a.download='bharilhq-role-system.json'; a.click();
+}
+
+function switchTab(name,el){
+  document.querySelectorAll('.output-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.output-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  const panel=document.getElementById('tab-'+name);
+  if(panel) panel.classList.add('active');
+}
+
+// Scroll reveal
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+</script>
+</body>
+</html>
